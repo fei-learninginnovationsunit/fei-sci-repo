@@ -17,6 +17,15 @@ void setup() {
   // Wait for the A9G module to initialize
   delay(1000);
   
+  // Check network registration
+  checkNetworkRegistration();
+
+  // Get CCID information
+  getCCID();
+
+  // Get signal strength
+  getSignalStrength();
+
   Serial.println("A9G SMS Sender Initialized");
 }
 
@@ -29,12 +38,42 @@ void loop() {
     // Check if the command is not empty
     if (command.length() > 0) {
       // Send SMS using the A9G module
-      sendSMS("+639452773486", command); // Replace with the desired phone number
+      sendSMS("+1234567890", command); // Replace with the desired phone number
 
       // Print a message to the Arduino IDE Serial Monitor
       Serial.println("SMS Sent!");
     }
   }
+}
+
+// Function to check network registration
+void checkNetworkRegistration() {
+  A9GSerial.println("AT+CREG?");
+  delay(1000);
+  while (A9GSerial.available()) {
+    Serial.write(A9GSerial.read());
+  }
+  Serial.println();
+}
+
+// Function to get CCID information
+void getCCID() {
+  A9GSerial.println("AT+CCID");
+  delay(1000);
+  while (A9GSerial.available()) {
+    Serial.write(A9GSerial.read());
+  }
+  Serial.println();
+}
+
+// Function to get signal strength
+void getSignalStrength() {
+  A9GSerial.println("AT+CSQ");
+  delay(1000);
+  while (A9GSerial.available()) {
+    Serial.write(A9GSerial.read());
+  }
+  Serial.println();
 }
 
 // Function to send an SMS using A9G module
